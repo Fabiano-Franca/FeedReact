@@ -19,14 +19,6 @@
   /*"0px -" foi acrescentado ao calculo "1.5rem -6px" para tornar o resultado final negativo */
 }
 
-.avatar {
-  width: calc(3rem + 12px); /*Calculo para que a imagem do avatar não reduza pq tem duas bordas.*/
-  height: calc(3rem + 12px);
-  border-radius: 8px;
-  border: 4px solid var(--gray-800);
-  border: 2px solid var(--green-500);
-}
-
 .profile strong {
 }
 
