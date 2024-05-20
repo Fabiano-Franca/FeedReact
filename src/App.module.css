@@ -8,3 +8,21 @@
   gap: 2rem;
   align-items: flex-start;
 }
+
+/*Quando a tela for menor que 768px*/
+@media (max-width: 768px) {
+  /*
+  16 ---> 100%
+  14 ---> x
+  14 * 100 /16 = 87,5
+  
+  */
+
+  html {
+    font-size: 87.5%;
+  }
+
+  .wrapper {
+    grid-template-columns: 1fr;
+  }
+}
