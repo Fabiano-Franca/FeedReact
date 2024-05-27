@@ -3,12 +3,12 @@ import styles from "./Comment.module.css";
 import { Avatar } from "./Avatar";
 import { useState } from "react";
 
-type Props = {
+type CommentProps = {
   content: string;
   onDeleteComment: (comment: string) => void;
 };
 
-export function Comment({ content, onDeleteComment }: Props) {
+export function Comment({ content, onDeleteComment }: CommentProps) {
   const [likeCount, setLikeCount] = useState(0);
 
   function handleDeleteComment() {
@@ -21,7 +21,7 @@ export function Comment({ content, onDeleteComment }: Props) {
 
   return (
     <div className={styles.comment}>
-      <Avatar hasBorder={false} path="https://github.com/fabiano-franca.png" />
+      <Avatar hasBorder={false} src="https://github.com/fabiano-franca.png" alt="" />
 
       <div className={styles.commentBox}>
         <div className={styles.commentContent}>

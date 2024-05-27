@@ -4,7 +4,7 @@ import { ptBR } from "date-fns/locale";
 import { Avatar } from "./Avatar";
 import { Comment } from "./Comment";
 import styles from "./Post.module.css";
-import { useState } from "react";
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react";
 
 // author: { avatar_url: "", name: "", role: ""},
 // publishedAt: Date
@@ -18,39 +18,45 @@ type Author = {
 
 type Content = {
   id: number;
-  type: string;
+  type: 'paragraph' | 'link';
   content: string;
 };
 
-type Props = {
+
+export interface PostType {
+  id: number;
   author: Author;
   content: Content[];
   publishedAt: Date;
+}
+
+type PostProps = {
+  post: PostType;
 };
 
-export function Post({ author, content, publishedAt }: Props) {
+export function Post({ post }: PostProps) {
   const [comments, setComments] = useState(["First comment..."]);
   const [newCommentText, setNewCommentText] = useState("");
 
   const isNewCommentEmpty = newCommentText.length === 0;
 
-  const publishedDateFormat = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
+  const publishedDateFormat = format(post.publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
     locale: ptBR,
   });
 
-  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+  const publishedDateRelativeToNow = formatDistanceToNow(post.publishedAt, {
     locale: ptBR,
     addSuffix: true,
   });
 
-  function handleCreateNewComment() {
-    event?.preventDefault(); /* Evita que ao submeter o formulário a página seja redirecionada/recarregada */
+  function handleCreateNewComment(event: FormEvent) {
+    event.preventDefault(); /* Evita que ao submeter o formulário a página seja redirecionada/recarregada */
 
     setComments([...comments, newCommentText]);
     setNewCommentText("");
   }
 
-  function handleNewCommentChange() {
+  function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {
     event.target.setCustomValidity('');
     setNewCommentText(event.target.value);
   }
@@ -63,7 +69,7 @@ function deleteComment(commentToDelete: string){
 	setComments(commentWithoutDeletedOne);
 }
 
-  function handleNewCommentInvalid() {
+  function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
     event.target.setCustomValidity('Esse campo é obrigatório!');
   }
 
@@ -71,20 +77,20 @@ function deleteComment(commentToDelete: string){
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar path={author.avatarUrl} />
+          <Avatar src={post.author.avatarUrl} />
           <div className={styles.authorInfo}>
-            <strong>{author.name}</strong>
-            <span>{author.role}</span>
+            <strong>{post.author.name}</strong>
+            <span>{post.author.role}</span>
           </div>
         </div>
 
-        <time title={publishedDateFormat} dateTime={publishedAt.toISOString()}>
+        <time title={publishedDateFormat} dateTime={post.publishedAt.toISOString()}>
           Publicado {publishedDateRelativeToNow}
         </time>
       </header>
 
       <div className={styles.content}>
-        {content.map((line) => {
+        {post.content.map((line) => {
           if (line.type === "paragraph") {
             return <p key={line.id}>{line.content}</p>;
           } else if (line.type === "link") {
